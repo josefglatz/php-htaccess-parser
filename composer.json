@@ -1,5 +1,5 @@
 {
-  "name": "tivie/htaccess-parser",
+  "name": "josefglatz/htaccess-parser",
   "description": "A .htaccess parser and validator implemented in PHP",
   "keywords": [".htaccess", "htaccess"],
   "homepage": "https://github.com/tivie/php-htaccess-parser",
@@ -12,7 +12,7 @@
     }
   ],
   "require": {
-    "php": ">=5.4.0"
+    "php": ">=8.2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5",
