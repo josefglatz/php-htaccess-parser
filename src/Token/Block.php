@@ -31,27 +31,18 @@ use Traversable;
  * @package Tivie\HtaccessParser\Token
  * @copyright 2014 Estevão Soares dos Santos
  */
-class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Countable
+class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Countable, \Stringable
 {
-    /**
-     * @var string
-     */
-    private $blockName;
+    private ?string $blockName = null;
 
-    /**
-     * @var array
-     */
-    private $arguments = array();
+    private array $arguments = [];
 
     /**
      * @var TokenInterface[]
      */
-    private $children = array();
+    private array $children = [];
 
-    /**
-     * @var int
-     */
-    private $indentation = 4;
+    private int $indentation = 4;
 
     /**
      * Create a new Block token.
@@ -78,7 +69,7 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
 
         if ($argument !== null) {
             if (!is_array($argument)) {
-                $argument = array($argument);
+                $argument = [$argument];
             }
             $this->arguments = $argument;
         }
@@ -160,7 +151,7 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function addArgument($arg)
+    public function addArgument(mixed $arg)
     {
         if (!is_scalar($arg)) {
             throw new InvalidArgumentException('scalar', 0);
@@ -190,7 +181,6 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
     /**
      * Add a child to this block
      *
-     * @param TokenInterface $child
      * @return $this
      */
     public function addChild(TokenInterface $child)
@@ -252,7 +242,7 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
      * <p>
      * The return argument will be casted to boolean if non-boolean was returned.
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset)
     {
         if (!is_scalar($offset)) {
             throw new \InvalidArgumentException("Offset must be a scalar");
@@ -268,7 +258,7 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
      * @return mixed Can return all argument types.
      * @throws InvalidArgumentException
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset)
     {
         if (!is_scalar($offset)) {
             throw new InvalidArgumentException('scalar', 0);
@@ -287,7 +277,7 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
      * @param mixed $argument The argument to set.
      * @throws InvalidArgumentException
      */
-    public function offsetSet($offset, $argument)
+    public function offsetSet(mixed $offset, mixed $argument)
     {
         if (!is_null($offset) && !is_scalar($offset)) {
             throw new InvalidArgumentException('scalar', 0);
@@ -309,7 +299,7 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
      * @param mixed $offset The offset to unset.
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset)
     {
         if (!is_scalar($offset)) {
             throw new \InvalidArgumentException("Offset must be a scalar");
@@ -339,7 +329,7 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
     {
         $array = [
             'arguments' => $this->arguments,
-            'children' => array()
+            'children' => []
         ];
 
         foreach ($this->children as $child) {
@@ -374,7 +364,7 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $ind = '';
         for ($i = 0; $i < $this->indentation; ++$i) {
@@ -421,7 +411,7 @@ class Block extends BaseToken implements \IteratorAggregate, \ArrayAccess, \Coun
             'type'      => $this->getTokenType(),
             'name'      => $this->getName(),
             'arguments' => $this->getArguments(),
-            'children'  => array()
+            'children'  => []
         ];
 
         foreach ($this->children as $child) {

@@ -56,7 +56,7 @@ class Parser
      */
     protected $mode = 2;
 
-    private $_cpMode = 2;
+    private int $_cpMode = 2;
 
     /**
      * @var bool
@@ -78,7 +78,6 @@ class Parser
      * Set the .htaccess file to parse
      *
      * @api
-     * @param \SplFileObject $file
      * @return $this
      */
     public function setFile(\SplFileObject $file)
@@ -96,7 +95,7 @@ class Parser
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function setContainer($container)
+    public function setContainer(mixed $container)
     {
         if (!is_array($container) && !$container instanceof \ArrayAccess) {
             throw new InvalidArgumentException('array or ArrayAccess Object', 0);
@@ -187,8 +186,8 @@ class Parser
     public function parse(\SplFileObject $file = null, $optFlags = null, $rewind = null)
     {
         //Prepare passed options
-        $file = ($file !== null) ? $file : $this->file;
-        $optFlags = ($optFlags !== null) ? $optFlags : $this->mode;
+        $file ??= $this->file;
+        $optFlags ??= $this->mode;
         $rewind = ($rewind !== null) ? !!$rewind : $this->rewind;
 
         if (!$file instanceof \SplFileObject) {
@@ -213,7 +212,7 @@ class Parser
 
         // Container
         if ($asArray) {
-            $htaccess = array();
+            $htaccess = [];
         } else {
             $htaccess = ($this->container != null) ? $this->container : new HtaccessContainer();
         }
@@ -241,9 +240,9 @@ class Parser
         $ignoreComments = (IGNORE_COMMENTS & $this->_cpMode);
 
         //Trim line
-        $line = trim($line);
+        $line = trim((string) $line);
 
-        $lineBreaks = array();
+        $lineBreaks = [];
 
         if ($this->isMultiLine($line)) {
             $line = $this->parseMultiLine($line, $file, $lineBreaks);
@@ -341,7 +340,7 @@ class Parser
     {
         $line = trim($line);
         $pattern = '/^\<\/';
-        $pattern .= ($blockName) ? $blockName : '[^\s\>]+';
+        $pattern .= $blockName ?: '[^\s\>]+';
         $pattern .= '\>$/i';
         return (preg_match($pattern, $line) > 0);
     }
@@ -350,19 +349,18 @@ class Parser
      * Parse a Multi Line
      *
      * @param $line
-     * @param \SplFileObject $file
      * @param $lineBreaks
      * @return string
      */
     protected function parseMultiLine($line, \SplFileObject $file, &$lineBreaks)
     {
         while ($this->isMultiLine($line) && $file->valid()) {
-            $lineBreaks[] = strlen($line);
+            $lineBreaks[] = strlen((string) $line);
 
             $line2 = $file->getCurrentLine();
 
             // trim the ending slash
-            $line = rtrim($line, '\\');
+            $line = rtrim((string) $line, '\\');
             // concatenate with next line
             $line = trim($line . $line2);
 
@@ -400,7 +398,6 @@ class Parser
      * Parse a Directive Line
      *
      * @param string $line
-     * @param \SplFileObject $file
      * @return Directive
      * @throws SyntaxException
      */
@@ -427,7 +424,6 @@ class Parser
      * Parse a Block Line
      *
      * @param string $line
-     * @param \SplFileObject $file
      * @return Block
      * @throws SyntaxException
      */
@@ -475,26 +471,26 @@ class Parser
     private function directiveRegex($str)
     {
         $pattern = '/"(?:\\.|[^\\"])*"|\S+/';
-        $matches = array();
-        $trimmedMatches = array();
-        if (preg_match_all($pattern, $str, $matches) && isset($matches[0])) {
+        $matches = [];
+        $trimmedMatches = [];
+        if (preg_match_all($pattern, (string) $str, $matches) && isset($matches[0])) {
             foreach ($matches[0] as $match) {
-                $match = trim($match);
+                $match = trim((string) $match);
                 if ($match != '') {
                     $trimmedMatches[] = $match;
                 }
             }
             return $trimmedMatches;
         }
-        return array();
+        return [];
     }
 
     private function blockRegex($line)
     {
         $pattern = '/(?:[\s|<]")([^<>"]+)(?:"[\s|>])|([^<>\s]+)/';
-        $final = array();
+        $final = [];
 
-        if (preg_match_all($pattern, $line, $matches) > 0) {
+        if (preg_match_all($pattern, (string) $line, $matches) > 0) {
             array_walk($matches[0], function ($val, $key) use (&$final) {
                 if ($val != null) {
                     $val = trim($val);

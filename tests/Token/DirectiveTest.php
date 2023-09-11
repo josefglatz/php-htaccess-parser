@@ -69,7 +69,7 @@ class DirectiveTest extends BaseTestCase
         $this->setProperty("arguments", $args);
 
         $expectedOtp = json_encode($args);
-        self::assertEquals($expectedOtp, json_encode($this->testClass));
+        self::assertEquals($expectedOtp, json_encode($this->testClass, JSON_THROW_ON_ERROR));
 
     }
 
@@ -91,7 +91,7 @@ class DirectiveTest extends BaseTestCase
      */
     public function testSetGetArguments()
     {
-        $args = array('foo', 'bar', 'baz');
+        $args = ['foo', 'bar', 'baz'];
         $this->testClass->setArguments($args);
         self::assertEquals($args, $this->testClass->getArguments());
     }
@@ -101,7 +101,7 @@ class DirectiveTest extends BaseTestCase
      */
     public function testSetArgumentsExceptions()
     {
-        $args = array('foo', new \StdClass());
+        $args = ['foo', new \StdClass()];
         $this->testClass->setArguments($args);
     }
 

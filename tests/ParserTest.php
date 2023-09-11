@@ -212,13 +212,12 @@ class ParserTest extends BaseTestCase
      * @param string $expectedBool
      * @param string $name
      * @param string $line
-     * @param array $args
      */
-    private function regexTesterMaker($expectedBool, $name, $line, array $args = array())
+    private function regexTesterMaker($expectedBool, $name, $line, array $args = [])
     {
         $bool = strtoupper($expectedBool);
         $method = $this->getMethod($name);
-        $assertion = array();
+        $assertion = [];
         switch ($bool) {
             case 'TRUE':
                 $assertion = [$this,'assertTrue'];

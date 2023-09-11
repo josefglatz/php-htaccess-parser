@@ -34,7 +34,7 @@ use Tivie\HtaccessParser\Exception\InvalidArgumentException;
 abstract class BaseToken implements TokenInterface
 {
 
-    protected $lineBreaks = array();
+    protected $lineBreaks = [];
 
     /**
      * Check if this Token spawns across multiple lines

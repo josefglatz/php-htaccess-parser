@@ -27,7 +27,7 @@ namespace Tivie\HtaccessParser\Token;
  * @package Tivie\HtaccessParser\Token
  * @copyright 2014 Estevão Soares dos Santos
  */
-class WhiteLine extends BaseToken
+class WhiteLine extends BaseToken implements \Stringable
 {
 
     /**
@@ -45,7 +45,7 @@ class WhiteLine extends BaseToken
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return '';
     }
@@ -92,7 +92,7 @@ class WhiteLine extends BaseToken
      */
     public function getArguments()
     {
-        return array('');
+        return [''];
     }
 
     /**

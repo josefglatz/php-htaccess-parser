@@ -55,7 +55,7 @@ class CommentTest extends BaseTestCase
 
         $expectedOtp = json_encode($text);
         self::assertEquals($text, (string) $this->testClass, "Casting Comment to string does not produce the expected value");
-        self::assertEquals($expectedOtp, json_encode($this->testClass));
+        self::assertEquals($expectedOtp, json_encode($this->testClass, JSON_THROW_ON_ERROR));
 
     }
 

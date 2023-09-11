@@ -30,12 +30,9 @@ use Tivie\HtaccessParser\Exception\InvalidArgumentException;
  * @package Tivie\HtaccessParser\Token
  * @copyright 2014 Estevão Soares dos Santos
  */
-class Comment extends BaseToken
+class Comment extends BaseToken implements \Stringable
 {
-    /**
-     * @var string
-     */
-    private $text = '';
+    private string $text = '';
 
     /**
      * Create a new Comment token.
@@ -87,7 +84,7 @@ class Comment extends BaseToken
 
         $text = trim($text);
 
-        if (strpos($text, '#') !== 0) {
+        if (!str_starts_with($text, '#')) {
             $text = '# ' . $text;
         }
 
@@ -111,7 +108,7 @@ class Comment extends BaseToken
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->text;
     }
@@ -146,7 +143,7 @@ class Comment extends BaseToken
      */
     public function getArguments()
     {
-        return array($this->getText());
+        return [$this->getText()];
     }
 
     /**

@@ -30,17 +30,14 @@ use Tivie\HtaccessParser\Exception\InvalidArgumentException;
  * @package Tivie\HtaccessParser\Token
  * @copyright 2014 Estevão Soares dos Santos
  */
-class Directive extends BaseToken
+class Directive extends BaseToken implements \Stringable
 {
     /**
      * @var string
      */
     private $name;
 
-    /**
-     * @var array
-     */
-    private $arguments = array();
+    private array $arguments = [];
 
     /**
      * @param string $name [optional]
@@ -48,7 +45,7 @@ class Directive extends BaseToken
      * @throws DomainException
      * @throws InvalidArgumentException
      */
-    public function __construct($name = null, array $arguments = array())
+    public function __construct($name = null, array $arguments = [])
     {
         if ($name !== null && !is_scalar($name)) {
             throw new InvalidArgumentException('scalar', 0);
@@ -102,7 +99,7 @@ class Directive extends BaseToken
      * @return $this
      * @throws DomainException
      */
-    public function setArguments(array $array = array())
+    public function setArguments(array $array = [])
     {
         foreach ($array as $arg) {
             if (!is_scalar($arg)) {
@@ -123,14 +120,14 @@ class Directive extends BaseToken
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function addArgument($arg, $unique = false)
+    public function addArgument(mixed $arg, $unique = false)
     {
         if (!is_scalar($arg)) {
             throw new InvalidArgumentException('scalar', 0);
         }
 
         // escape arguments with spaces
-        if (strpos($arg, ' ') !== false && (strpos($arg, '"') === false) ) {
+        if (str_contains($arg, ' ') && (!str_contains($arg, '"')) ) {
             $arg = "\"$arg\"";
         }
 
@@ -161,7 +158,7 @@ class Directive extends BaseToken
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $str = $this->getName();
         foreach ($this->arguments as $arg) {

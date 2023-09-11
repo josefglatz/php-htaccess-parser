@@ -77,7 +77,7 @@ class BlockTest extends BaseTestCase
      */
     public function testSetGetArguments()
     {
-        $args = array('foo', 'bar', 'baz');
+        $args = ['foo', 'bar', 'baz'];
         $this->testClass->setArguments($args);
         self::assertEquals($args, $this->testClass->getArguments());
     }
@@ -88,7 +88,7 @@ class BlockTest extends BaseTestCase
      */
     public function testSetArgumentsExceptions()
     {
-        $args = array('foo', new \StdClass());
+        $args = ['foo', new \StdClass()];
         $this->testClass->setArguments($args);
     }
 
@@ -115,7 +115,7 @@ class BlockTest extends BaseTestCase
     public function testAddChild()
     {
         $child = $this->getMockBuilder('\Tivie\HtaccessParser\Token\TokenInterface')
-                      ->setMethods(array())
+                      ->setMethods([])
                       ->getMock();
         $this->testClass->addChild($child);
 
@@ -128,21 +128,21 @@ class BlockTest extends BaseTestCase
     public function testRemoveChild()
     {
         $child = $this->getMockBuilder('\Tivie\HtaccessParser\Token\TokenInterface')
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $notChild = $this->getMockBuilder('\Tivie\HtaccessParser\Token\TokenInterface')
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
-        $this->setProperty('children', array($child));
+        $this->setProperty('children', [$child]);
 
         //Test equal removal
         $this->testClass->removeChild($child);
         self::assertNotContains($child, $this->getProperty('children'), "Test EQUAL removal: Child was NOT removed from block but it should");
 
 
-        $this->setProperty('children', array($child));
+        $this->setProperty('children', [$child]);
 
         // Test strict removal
         $this->testClass->removeChild($notChild, true);
@@ -153,7 +153,7 @@ class BlockTest extends BaseTestCase
         self::assertNotContains($child,$this->getProperty('children'), "Test LOOSE removal: Child was NOT removed from block but it should");
 
 
-        $this->setProperty('children', array($child));
+        $this->setProperty('children', [$child]);
 
         // Test loose removal 2
         $child->foo = 'bar';

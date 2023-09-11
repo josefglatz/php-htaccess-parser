@@ -165,7 +165,7 @@ class HtaccessContainerTest extends BaseTestCase
         $tokenM2 = $this->createTokenMock(TOKEN_BLOCK);
         $htaccess = $this->fillContainer($this->testClass);
         $array = [$tokenM2, $tokenM2, $tokenM2];
-        $max = count($htaccess);
+        $max = is_countable($htaccess) ? count($htaccess) : 0;
         $spliced = $htaccess->splice(1, $max, $array);
 
         self::assertSame($tokenM1, $htaccess[0]);
@@ -209,11 +209,11 @@ class HtaccessContainerTest extends BaseTestCase
 
     protected function fillContainer($htaccess = null, $num = 6, $rand = false)
     {
-        $htaccess = ($htaccess) ? $htaccess : $this->testClass;
+        $htaccess = $htaccess ?: $this->testClass;
 
         for($i=0;$i<$num;++$i) {
             if ($rand) {
-                $htaccess[] = $this->createTokenMock(mt_rand(0,4));
+                $htaccess[] = $this->createTokenMock(random_int(0,4));
             } else {
                 $htaccess[] = $this->genericToken;
             }
@@ -224,32 +224,23 @@ class HtaccessContainerTest extends BaseTestCase
 
     protected function createTokenMock($type = null)
     {
-        switch($type) {
-            case TOKEN_DIRECTIVE:
-                return $this->getMockBuilder('\Tivie\HtaccessParser\Token\Directive')
-                            ->setMethods([])
-                            ->getMock();
-                break;
-            case TOKEN_BLOCK:
-                return $this->getMockBuilder('\Tivie\HtaccessParser\Token\Block')
-                            ->setMethods([])
-                            ->getMock();
-                break;
-            case TOKEN_COMMENT:
-                return $this->getMockBuilder('\Tivie\HtaccessParser\Token\Comment')
-                            ->setMethods([])
-                            ->getMock();
-                break;
-            case TOKEN_WHITELINE:
-                return $this->getMockBuilder('\Tivie\HtaccessParser\Token\WhiteLine')
-                            ->setMethods([])
-                            ->getMock();
-                break;
-            default:
-                return $this->getMockBuilder('\Tivie\HtaccessParser\Token\TokenInterface')
-                            ->setMethods([])
-                            ->getMock();
-        }
+        return match ($type) {
+            TOKEN_DIRECTIVE => $this->getMockBuilder('\Tivie\HtaccessParser\Token\Directive')
+                        ->setMethods([])
+                        ->getMock(),
+            TOKEN_BLOCK => $this->getMockBuilder('\Tivie\HtaccessParser\Token\Block')
+                        ->setMethods([])
+                        ->getMock(),
+            TOKEN_COMMENT => $this->getMockBuilder('\Tivie\HtaccessParser\Token\Comment')
+                        ->setMethods([])
+                        ->getMock(),
+            TOKEN_WHITELINE => $this->getMockBuilder('\Tivie\HtaccessParser\Token\WhiteLine')
+                        ->setMethods([])
+                        ->getMock(),
+            default => $this->getMockBuilder('\Tivie\HtaccessParser\Token\TokenInterface')
+                        ->setMethods([])
+                        ->getMock(),
+        };
     }
 
 }

@@ -34,7 +34,7 @@ use Tivie\HtaccessParser\Token\WhiteLine;
  * @package Tivie\HtaccessParser
  * @copyright 2014 Estevão Soares dos Santos
  */
-class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
+class HtaccessContainer extends BaseArrayObject implements HtaccessInterface, \Stringable
 {
 
     /**
@@ -42,22 +42,16 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      */
     private $indentation = 4;
 
-    /**
-     * @var bool
-     */
-    private $ignoreWhiteLines = false;
+    private bool $ignoreWhiteLines = false;
 
-    /**
-     * @var bool
-     */
-    private $ignoreComments = false;
+    private bool $ignoreComments = false;
 
     /**
      * Create a new HtaccessContainer
      *
      * @param array $array [optional] An array to populate the ArrayObject
      */
-    public function __construct(array $array = array())
+    public function __construct(array $array = [])
     {
         parent::__construct($array);
     }
@@ -206,7 +200,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
     {
         /** @var \Tivie\HtaccessParser\Token\TokenInterface[] $array */
         $array = $this->getArrayCopy();
-        $otp = array();
+        $otp = [];
         foreach ($array as $arr) {
             if (!$arr instanceof WhiteLine & !$arr instanceof Comment) {
                 $otp[$arr->getName()] = $arr;
@@ -254,7 +248,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @api
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->txtSerialize();
     }
@@ -357,7 +351,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
         if (!is_int($offset)) {
             throw new InvalidArgumentException('integer', 0);
         }
-        $this->splice($offset, 0, array($token));
+        $this->splice($offset, 0, [$token]);
 
         return $this;
     }
@@ -381,7 +375,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @return array                 Returns the array consisting of the extracted elements.
      * @throws InvalidArgumentException
      */
-    public function splice($offset, $length = null, $replacement = array())
+    public function splice($offset, $length = null, $replacement = [])
     {
         if (!is_int($offset)) {
             throw new InvalidArgumentException('integer', 0);
