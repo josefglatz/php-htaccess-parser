@@ -227,7 +227,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface, \S
 
         $this->indentation = (is_null($indentation)) ? $this->indentation : $indentation;
         $ignoreWhiteLines = (is_null($ignoreWhiteLines)) ? $this->ignoreWhiteLines : $ignoreWhiteLines;
-        $ignoreComments = (is_null($ignoreComments)) ? $this->ignoreCommentss : $ignoreComments;
+        $ignoreComments = (is_null($ignoreComments)) ? $this->ignoreComments : $ignoreComments;
 
 
         foreach ($array as $num => $token) {
